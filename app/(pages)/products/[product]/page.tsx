@@ -3,6 +3,7 @@
 import type { Product } from "@/types";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import Spline from "@splinetool/react-spline";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 
@@ -10,7 +11,7 @@ const product = {
 	name: "Product Name",
 	description:
 		"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab veritatis saepe consectetur itaque vel id ipsa perferendis adipisci ea, ut officia beatae autem rerum, voluptate laborum accusamus inventore quidem tempora!Lorem ipsum dolor sit amet consectetur adipisicing elit. Et, quis?",
-	spline: "",
+	spline: "https://prod.spline.design/HD1hNm0sTCIs2TZr/scene.splinecode",
 	etsy: "",
 	price: 15.0,
 	discount: {
@@ -49,7 +50,10 @@ export default function Home() {
 
 	return (
 		<div className="flex space-x-12 p-12">
-			<div className="h-full w-full bg-slate-700 p-12 text-center text-5xl">Spline Here</div>
+			<div className="relative h-full w-full rounded-3xl bg-slate-700 text-center text-5xl">
+				<Spline className="aspect-square" scene={product.spline} />
+			</div>
+
 			<div className="flex h-full w-2/3 flex-col rounded-3xl border border-slate-700 p-8">
 				<h1 className="text-3xl font-semibold">{product.name}</h1>
 				<p className="mt-4 font-light text-slate-400">{product.description}</p>
