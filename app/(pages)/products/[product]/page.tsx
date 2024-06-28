@@ -43,6 +43,10 @@ export default function Home() {
 		[customizations],
 	);
 
+	const findCustomizationByName = (name: string) => customizations.find((e) => e.name === name);
+
+	const toDecimalPlaces = (value: number) => (Math.round(value) === value ? value : value.toFixed(2));
+
 	return (
 		<div className="flex space-x-12 p-12">
 			<div className="h-full w-full bg-slate-700 p-12 text-center text-5xl">Spline Here</div>
@@ -60,13 +64,13 @@ export default function Home() {
 								<label htmlFor={customization.name}>
 									{customization.name}{" "}
 									{customization.price &&
-										`(+$${Math.round(customization.price) === customization.price ? customization.price : customization.price.toFixed(2)}
+										`(+$${toDecimalPlaces(customization.price)}
 									)`}
 								</label>
 								<input
 									type="text"
 									id={customization.name}
-									value={customizations.find((e) => e.name === customization.name)?.value ?? ""}
+									value={findCustomizationByName(customization.name)?.value ?? ""}
 									onChange={(e) =>
 										setCustomizations((prev) =>
 											prev.map((pre) =>
@@ -84,9 +88,7 @@ export default function Home() {
 							<div className="space-y-2">
 								<span>{customization.name}</span>
 								<Listbox
-									value={
-										customizations.find((e) => e.name === customization.name) ?? { name: customization.name, value: "" }
-									}
+									value={findCustomizationByName(customization.name) ?? { name: customization.name, value: "" }}
 									onChange={(e) =>
 										setCustomizations((prev) =>
 											prev.map((pre) =>
@@ -96,8 +98,11 @@ export default function Home() {
 											),
 										)
 									}>
-									<ListboxButton className="relative block w-full rounded-lg bg-white/5 py-1.5 pl-3 pr-8 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25">
-										{customizations.find((e) => e.name === customization.name)?.value || customization.name}
+									<ListboxButton
+										className={`relative block w-full rounded-lg bg-white/5 py-1.5 pl-3 pr-8 text-left text-sm/6 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 ${findCustomizationByName(customization.name)?.value ? "text-white" : "text-slate-400"}`}>
+										{findCustomizationByName(customization.name)?.value
+											? `${findCustomizationByName(customization.name)?.value}${findCustomizationByName(customization.name)?.price ? `(+$${toDecimalPlaces(findCustomizationByName(customization.name)?.price as number)})` : ""}`
+											: customization.name}
 										<ChevronDownIcon
 											className="group pointer-events-none absolute right-2.5 top-2.5 size-4 fill-white/60"
 											aria-hidden="true"
@@ -116,10 +121,7 @@ export default function Home() {
 													className={`size-4 fill-white ${customizations.find((c) => c.name === customization.name)?.value === option.name ? "visible" : "invisible"}`}
 												/>
 												<div className="text-sm/6 text-white">
-													{option.name}{" "}
-													{option.price &&
-														`(+$${Math.round(option.price) === option.price ? option.price : option.price.toFixed(2)}
-									)`}
+													{option.name} {option.price && `(+$${toDecimalPlaces(option.price)})`}
 												</div>
 											</ListboxOption>
 										))}
