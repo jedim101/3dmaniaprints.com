@@ -39,7 +39,7 @@ export default function Home() {
 	);
 
 	useEffect(
-		() => setCost(priceWithDiscount + customizations.reduce((sum, e) => sum + (e.price ?? 0), 0)),
+		() => setCost(priceWithDiscount + customizations.reduce((sum, e) => sum + (e.value && e.price ? e.price : 0), 0)),
 		[customizations],
 	);
 
