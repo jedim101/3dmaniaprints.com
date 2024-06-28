@@ -1,7 +1,6 @@
 "use client";
 
 import { products } from "@/lib/products";
-import type { Product } from "@/types";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Spline from "@splinetool/react-spline";
@@ -9,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 
-export default function Home({ params }: { params: { productName: string } }) {
+export default function Product({ params }: { params: { productName: string } }) {
 	const product = products.find((e) => e.name === params.productName.replace("_", " "));
 
 	const router = useRouter();
