@@ -16,7 +16,10 @@ const product = {
 		type: "percentage",
 		amount: 0.5,
 	},
-	customizations: [{ name: "Customizable Text", price: 2, required: false, type: "text", placeholder: "Placeholder" }],
+	customizations: [
+		{ name: "Customizable Text", price: 2, required: false, type: "text", placeholder: "Placeholder" },
+		{ type: "option", name: "Color", required: false },
+	],
 } as Product;
 
 export default function Home() {
@@ -28,10 +31,10 @@ export default function Home() {
 
 	const [cost, setCost] = useState(priceWithDiscount);
 
-	const [customizations, setCustomizations] = useState({} as { [key: string]: { value: string; price: number } });
+	const [customizations, setCustomizations] = useState({} as { [key: string]: { value: string; price?: number } });
 
 	useEffect(
-		() => setCost(priceWithDiscount + Object.values(customizations).reduce((sum, e) => sum + e.price, 0)),
+		() => setCost(priceWithDiscount + Object.values(customizations).reduce((sum, e) => sum + (e.price ?? 0), 0)),
 		[customizations],
 	);
 
@@ -51,9 +54,10 @@ export default function Home() {
 							<div className="space-y-2">
 								<label className="" htmlFor={customization.name}>
 									{customization.name} (+$
-									{Math.round(customization.price) === customization.price
-										? customization.price
-										: customization.price.toFixed(2)}
+									{customization.price &&
+										(Math.round(customization.price) === customization.price
+											? customization.price
+											: customization.price.toFixed(2))}
 									)
 								</label>
 								<input

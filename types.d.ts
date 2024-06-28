@@ -1,20 +1,22 @@
-interface CustomText {
+interface BaseCustomization {
+	name: string;
 	name: string;
 	required: boolean;
+}
+
+interface CustomText {
 	type: "text";
 	maxChars?: number;
-	price: number;
+	price?: number;
 	placeholder?: string;
 }
 
 interface CustomOption {
-	name: string;
-	required: boolean;
 	type: "option";
-	options: { name: string; price: number }[];
+	options: { name: string; price?: number }[];
 }
 
-export type Customization = CustomText | CustomOption;
+type Customizations = (CustomText | CustomOption) & BaseCustomization;
 
 export interface Product {
 	name: string;
@@ -26,5 +28,5 @@ export interface Product {
 		type: "percentage" | "price";
 		amount: number;
 	};
-	customizations?: Customization[];
+	customizations?: Customizations[];
 }
