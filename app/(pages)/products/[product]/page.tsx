@@ -2,7 +2,7 @@
 
 import type { Product } from "@/types";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 
@@ -32,10 +32,14 @@ export default function Home() {
 
 	const [cost, setCost] = useState(priceWithDiscount);
 
-	const [customizations, setCustomizations] = useState({} as { [key: string]: { value: string; price?: number } });
+	const [customizations, setCustomizations] = useState(
+		product.customizations?.map((c) => {
+			return { name: c.name, value: "" };
+		}) as { name: string; value: string; price?: number }[],
+	);
 
 	useEffect(
-		() => setCost(priceWithDiscount + Object.values(customizations).reduce((sum, e) => sum + (e.price ?? 0), 0)),
+		() => setCost(priceWithDiscount + customizations.reduce((sum, e) => sum + (e.price ?? 0), 0)),
 		[customizations],
 	);
 
@@ -62,11 +66,15 @@ export default function Home() {
 								<input
 									type="text"
 									id={customization.name}
-									value={customizations[customization.name]?.value ?? ""}
+									value={customizations.find((e) => e.name === customization.name)?.value ?? ""}
 									onChange={(e) =>
-										setCustomizations((prev) => {
-											return { ...prev, [customization.name]: { value: e.target.value, price: customization.price } };
-										})
+										setCustomizations((prev) =>
+											prev.map((pre) =>
+												pre.name === customization.name
+													? { name: customization.name, value: e.target.value, price: customization.price }
+													: pre,
+											),
+										)
 									}
 									placeholder={customization.placeholder}
 									className="w-full rounded-lg border border-slate-700 bg-transparent p-2 outline-none focus:border-indigo-500"
@@ -76,27 +84,35 @@ export default function Home() {
 							<div className="space-y-2">
 								<span>{customization.name}</span>
 								<Listbox
-									as="div"
-									className="relative flex w-full rounded-lg border border-slate-700 outline-none"
-									value={customizations[customization.name]}
+									value={
+										customizations.find((e) => e.name === customization.name) ?? { name: customization.name, value: "" }
+									}
 									onChange={(e) =>
-										setCustomizations((prev) => {
-											return { ...prev, [customization.name]: { value: e.value, price: e.price } };
-										})
+										setCustomizations((prev) =>
+											prev.map((pre) =>
+												pre.name === customization.name
+													? { name: customization.name, value: e.value, price: e.price }
+													: pre,
+											),
+										)
 									}>
-									<ListboxButton className="h-full w-full p-2 text-left">
-										{customizations[customization.name]?.value ?? customization.name}
+									<ListboxButton className="relative block w-full rounded-lg bg-white/5 py-1.5 pl-3 pr-8 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25">
+										{customizations.find((e) => e.name === customization.name)?.value || customization.name}
+										<ChevronDownIcon
+											className="group pointer-events-none absolute right-2.5 top-2.5 size-4 fill-white/60"
+											aria-hidden="true"
+										/>
 									</ListboxButton>
 									<ListboxOptions
 										anchor="bottom"
 										transition
-										className="w-[var(--button-width)] rounded-xl border border-slate-600 bg-slate-700 p-1 transition duration-100 ease-in [--anchor-gap:var(--spacing-1)] focus:outline-none data-[leave]:data-[closed]:opacity-0">
+										className="w-[var(--button-width)] rounded-xl border border-white/5 bg-white/5 p-1 transition duration-100 ease-in [--anchor-gap:var(--spacing-1)] focus:outline-none data-[leave]:data-[closed]:opacity-0">
 										{customization.options.map((option) => (
 											<ListboxOption
 												key={option.name}
 												value={option}
 												className="group flex cursor-default select-none items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-white/10">
-												<CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />{" "}
+												<CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
 												<div className="text-sm/6 text-white">{option.name}</div>
 											</ListboxOption>
 										))}
