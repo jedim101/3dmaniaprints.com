@@ -2,7 +2,7 @@
 
 import type { Product } from "@/types";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { CheckIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Spline from "@splinetool/react-spline";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
@@ -48,10 +48,19 @@ export default function Home() {
 
 	const toDecimalPlaces = (value: number) => (Math.round(value) === value ? value : value.toFixed(2));
 
+	const [tooltip, setTooltip] = useState(true);
+
 	return (
 		<div className="flex space-x-12 p-12">
-			<div className="relative h-full w-full rounded-3xl bg-slate-700 text-center text-5xl">
+			<div className="relative h-full w-full rounded-3xl bg-slate-700/50 text-center text-5xl">
 				<Spline className="aspect-square" scene={product.spline} />
+				<div
+					className={`absolute bottom-12 left-1/2 flex -translate-x-1/2 items-center space-x-1 rounded-full bg-gray-600 px-5 py-3 text-base ${!tooltip ? "hidden" : ""}`}>
+					<span>Click and drag to orbit!</span>
+					<button type="button" onClick={() => setTooltip(false)}>
+						<XMarkIcon className="h-4 w-4" />
+					</button>
+				</div>
 			</div>
 
 			<div className="flex h-full w-2/3 flex-col rounded-3xl border border-slate-700 p-8">
