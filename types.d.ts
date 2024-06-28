@@ -1,12 +1,15 @@
 interface CustomText {
 	name: string;
+	required: boolean;
 	type: "text";
-	maxChars: number;
-	price: string;
+	maxChars?: number;
+	price: number;
+	placeholder?: string;
 }
 
 interface CustomOption {
 	name: string;
+	required: boolean;
 	type: "option";
 	options: { name: string; price: number }[];
 }
@@ -23,5 +26,5 @@ export interface Product {
 		type: "percentage" | "price";
 		amount: number;
 	};
-	customization?: Customization[];
+	customizations?: Customization[];
 }

@@ -2,6 +2,7 @@
 
 import type { Product } from "@/types";
 import Link from "next/link";
+import { Fragment } from "react";
 
 const product = {
 	name: "Product Name",
@@ -14,6 +15,7 @@ const product = {
 		type: "percentage",
 		amount: 0.5,
 	},
+	customizations: [{ name: "Customizable Text", price: 2, required: false, type: "text", placeholder: "Placeholder" }],
 } as Product;
 
 export default function Home() {
@@ -33,6 +35,25 @@ export default function Home() {
 					<span>${cost.toFixed(2)}</span>
 					{product.price !== cost && <s className="text-base text-red-500">${product.price.toFixed(2)}</s>}
 				</div>
+				{product.customizations?.map((customization) => (
+					<div className="mt-8" key={customization.name}>
+						{customization.type === "text" ? (
+							<div className="space-y-2">
+								<label className="" htmlFor={customization.name}>
+									{customization.name}
+								</label>
+								<input
+									type="text"
+									id={customization.name}
+									placeholder={customization.placeholder}
+									className="w-full rounded-lg border border-slate-700 bg-transparent p-2 outline-none focus:border-indigo-500"
+								/>
+							</div>
+						) : (
+							<></>
+						)}
+					</div>
+				))}
 				<Link
 					href={product.etsy}
 					className="mt-10 w-full rounded-full bg-indigo-600 p-3 text-center font-bold hover:bg-indigo-500">
