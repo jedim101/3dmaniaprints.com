@@ -99,7 +99,7 @@ export default function Home() {
 										)
 									}>
 									<ListboxButton
-										className={`relative block w-full rounded-lg bg-white/5 py-1.5 pl-3 pr-8 text-left text-sm/6 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 ${findCustomizationByName(customization.name)?.value ? "text-white" : "text-slate-400"}`}>
+										className={`relative block w-full rounded-lg border border-slate-700 p-2 text-left focus:border-indigo-500 ${findCustomizationByName(customization.name)?.value ? "text-white" : "text-slate-400"}`}>
 										{findCustomizationByName(customization.name)?.value
 											? `${findCustomizationByName(customization.name)?.value}${findCustomizationByName(customization.name)?.price ? `(+$${toDecimalPlaces(findCustomizationByName(customization.name)?.price as number)})` : ""}`
 											: customization.name}
