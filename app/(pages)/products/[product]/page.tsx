@@ -1,8 +1,9 @@
 "use client";
 
 import type { Product } from "@/types";
+import { Listbox } from "@headlessui/react";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 const product = {
 	name: "Product Name",
@@ -19,11 +20,20 @@ const product = {
 } as Product;
 
 export default function Home() {
-	const cost =
+	const priceWithDiscount =
 		product.price -
 		(product.discount
 			? { percentage: product.price * product.discount.amount, price: product.discount.amount }[product.discount.type]
 			: 0);
+
+	const [cost, setCost] = useState(priceWithDiscount);
+
+	const [customizations, setCustomizations] = useState({} as { [key: string]: { value: string; price: number } });
+
+	useEffect(
+		() => setCost(priceWithDiscount + Object.values(customizations).reduce((sum, e) => sum + e.price, 0)),
+		[customizations],
+	);
 
 	return (
 		<div className="flex space-x-12 p-12">
@@ -40,17 +50,27 @@ export default function Home() {
 						{customization.type === "text" ? (
 							<div className="space-y-2">
 								<label className="" htmlFor={customization.name}>
-									{customization.name}
+									{customization.name} (+$
+									{Math.round(customization.price) === customization.price
+										? customization.price
+										: customization.price.toFixed(2)}
+									)
 								</label>
 								<input
 									type="text"
 									id={customization.name}
+									value={customizations[customization.name]?.value ?? ""}
+									onChange={(e) =>
+										setCustomizations((prev) => {
+											return { ...prev, [customization.name]: { value: e.target.value, price: customization.price } };
+										})
+									}
 									placeholder={customization.placeholder}
 									className="w-full rounded-lg border border-slate-700 bg-transparent p-2 outline-none focus:border-indigo-500"
 								/>
 							</div>
 						) : (
-							<></>
+							<Listbox></Listbox>
 						)}
 					</div>
 				))}
