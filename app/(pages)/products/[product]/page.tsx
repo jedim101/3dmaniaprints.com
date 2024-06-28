@@ -10,16 +10,29 @@ const product = {
 	spline: "",
 	etsy: "",
 	price: 15.0,
+	discount: {
+		type: "percentage",
+		amount: 0.5,
+	},
 } as Product;
 
 export default function Home() {
+	const cost =
+		product.price -
+		(product.discount
+			? { percentage: product.price * product.discount.amount, price: product.discount.amount }[product.discount.type]
+			: 0);
+
 	return (
 		<div className="flex space-x-12 p-12">
 			<div className="h-full w-full bg-slate-700 p-12 text-center text-5xl">Spline Here</div>
 			<div className="flex h-full w-2/3 flex-col rounded-3xl border border-slate-700 p-8">
 				<h1 className="text-3xl font-semibold">{product.name}</h1>
 				<p className="mt-4 font-light text-slate-400">{product.description}</p>
-				<div className="mt-6 text-lg">${product.price.toFixed(2)}</div>
+				<div className="mt-6 space-x-2 text-xl">
+					<span>${cost.toFixed(2)}</span>
+					{product.price !== cost && <s className="text-base text-red-500">${product.price.toFixed(2)}</s>}
+				</div>
 				<Link
 					href={product.etsy}
 					className="mt-10 w-full rounded-full bg-indigo-600 p-3 text-center font-bold hover:bg-indigo-500">
