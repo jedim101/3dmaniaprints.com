@@ -1,7 +1,8 @@
 "use client";
 
 import type { Product } from "@/types";
-import { Listbox } from "@headlessui/react";
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
+import { CheckIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 
@@ -18,7 +19,7 @@ const product = {
 	},
 	customizations: [
 		{ name: "Customizable Text", price: 2, required: false, type: "text", placeholder: "Placeholder" },
-		{ type: "option", name: "Color", required: false },
+		{ type: "option", name: "Color", required: false, options: [{ name: "Red", price: 1.5 }, { name: "Blue" }] },
 	],
 } as Product;
 
@@ -52,13 +53,11 @@ export default function Home() {
 					<div className="mt-8" key={customization.name}>
 						{customization.type === "text" ? (
 							<div className="space-y-2">
-								<label className="" htmlFor={customization.name}>
-									{customization.name} (+$
+								<label htmlFor={customization.name}>
+									{customization.name}{" "}
 									{customization.price &&
-										(Math.round(customization.price) === customization.price
-											? customization.price
-											: customization.price.toFixed(2))}
-									)
+										`(+$${Math.round(customization.price) === customization.price ? customization.price : customization.price.toFixed(2)}
+									)`}
 								</label>
 								<input
 									type="text"
@@ -74,13 +73,42 @@ export default function Home() {
 								/>
 							</div>
 						) : (
-							<Listbox></Listbox>
+							<div className="space-y-2">
+								<span>{customization.name}</span>
+								<Listbox
+									as="div"
+									className="relative flex w-full rounded-lg border border-slate-700 outline-none"
+									value={customizations[customization.name]}
+									onChange={(e) =>
+										setCustomizations((prev) => {
+											return { ...prev, [customization.name]: { value: e.value, price: e.price } };
+										})
+									}>
+									<ListboxButton className="h-full w-full p-2 text-left">
+										{customizations[customization.name]?.value ?? customization.name}
+									</ListboxButton>
+									<ListboxOptions
+										anchor="bottom"
+										transition
+										className="w-[var(--button-width)] rounded-xl border border-slate-600 bg-slate-700 p-1 transition duration-100 ease-in [--anchor-gap:var(--spacing-1)] focus:outline-none data-[leave]:data-[closed]:opacity-0">
+										{customization.options.map((option) => (
+											<ListboxOption
+												key={option.name}
+												value={option}
+												className="group flex cursor-default select-none items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-white/10">
+												<CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />{" "}
+												<div className="text-sm/6 text-white">{option.name}</div>
+											</ListboxOption>
+										))}
+									</ListboxOptions>
+								</Listbox>
+							</div>
 						)}
 					</div>
 				))}
 				<Link
 					href={product.etsy}
-					className="mt-10 w-full rounded-full bg-indigo-600 p-3 text-center font-bold hover:bg-indigo-500">
+					className="mt-16 w-full rounded-full bg-indigo-600 p-3 text-center font-bold hover:bg-indigo-500">
 					Purchase on Etsy
 				</Link>
 			</div>
