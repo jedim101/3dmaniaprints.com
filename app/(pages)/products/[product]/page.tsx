@@ -106,14 +106,21 @@ export default function Home() {
 									<ListboxOptions
 										anchor="bottom"
 										transition
-										className="w-[var(--button-width)] rounded-xl border border-white/5 bg-white/5 p-1 transition duration-100 ease-in [--anchor-gap:var(--spacing-1)] focus:outline-none data-[leave]:data-[closed]:opacity-0">
+										className="w-[var(--button-width)] rounded-xl border border-slate-600 bg-slate-700 p-1 transition duration-100 ease-in [--anchor-gap:var(--spacing-1)] focus:outline-none data-[leave]:data-[closed]:opacity-0">
 										{customization.options.map((option) => (
 											<ListboxOption
 												key={option.name}
-												value={option}
+												value={{ value: option.name, price: option.price }}
 												className="group flex cursor-default select-none items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-white/10">
-												<CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
-												<div className="text-sm/6 text-white">{option.name}</div>
+												<CheckIcon
+													className={`size-4 fill-white ${customizations.find((c) => c.name === customization.name)?.value === option.name ? "visible" : "invisible"}`}
+												/>
+												<div className="text-sm/6 text-white">
+													{option.name}{" "}
+													{option.price &&
+														`(+$${Math.round(option.price) === option.price ? option.price : option.price.toFixed(2)}
+									)`}
+												</div>
 											</ListboxOption>
 										))}
 									</ListboxOptions>
