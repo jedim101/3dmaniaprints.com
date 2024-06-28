@@ -1,46 +1,38 @@
 "use client";
 
+import { products } from "@/lib/products";
 import type { Product } from "@/types";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Spline from "@splinetool/react-spline";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 
-const product = {
-	name: "Product Name",
-	description:
-		"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab veritatis saepe consectetur itaque vel id ipsa perferendis adipisci ea, ut officia beatae autem rerum, voluptate laborum accusamus inventore quidem tempora!Lorem ipsum dolor sit amet consectetur adipisicing elit. Et, quis?",
-	spline: "https://prod.spline.design/HD1hNm0sTCIs2TZr/scene.splinecode",
-	etsy: "",
-	price: 15.0,
-	discount: {
-		type: "percentage",
-		amount: 0.5,
-	},
-	customizations: [
-		{ name: "Customizable Text", price: 2, required: false, type: "text", placeholder: "Placeholder" },
-		{ type: "option", name: "Color", required: false, options: [{ name: "Red", price: 1.5 }, { name: "Blue" }] },
-	],
-} as Product;
+export default function Home({ params }: { params: { productName: string } }) {
+	const product = products.find((e) => e.name === params.productName.replace("_", " "));
 
-export default function Home() {
+	const router = useRouter();
+
 	const priceWithDiscount =
-		product.price -
-		(product.discount
-			? { percentage: product.price * product.discount.amount, price: product.discount.amount }[product.discount.type]
-			: 0);
+		product?.price ??
+		0 -
+			(product?.discount
+				? { percentage: product.price * product.discount.amount, price: product.discount.amount }[product.discount.type]
+				: 0);
 
 	const [cost, setCost] = useState(priceWithDiscount);
 
 	const [customizations, setCustomizations] = useState(
-		product.customizations?.map((c) => {
+		product?.customizations?.map((c) => {
 			return { name: c.name, value: "" };
 		}) as { name: string; value: string; price?: number }[],
 	);
 
 	useEffect(
-		() => setCost(priceWithDiscount + customizations.reduce((sum, e) => sum + (e.value && e.price ? e.price : 0), 0)),
+		() =>
+			product &&
+			setCost(priceWithDiscount + customizations.reduce((sum, e) => sum + (e.value && e.price ? e.price : 0), 0)),
 		[customizations],
 	);
 
@@ -49,6 +41,8 @@ export default function Home() {
 	const toDecimalPlaces = (value: number) => (Math.round(value) === value ? value : value.toFixed(2));
 
 	const [tooltip, setTooltip] = useState(true);
+
+	if (!product) return router.push("/not-found");
 
 	return (
 		<div className="flex space-x-12 p-12">
