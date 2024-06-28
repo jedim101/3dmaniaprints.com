@@ -19,9 +19,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`flex min-h-screen flex-col ${inter.className}`}>
+			<body className={`${inter.className}`}>
 				<Header />
-				<main className="grow bg-slate-800">{children}</main>
+				<main className="min-h-[calc(100vh-4rem)] bg-slate-800 text-white">{children}</main>
 				<Footer />
 
 				{/* Vercel Analytics */}
