@@ -4,6 +4,7 @@ I used Spline for the 3D embeds, which you can view here:
 
 - [home page models](https://community.spline.design/file/c49ff4a2-8e3c-4f35-8174-856898ab3847)
 - [Trophy](https://app.spline.design/community/file/9948e7ee-5dfc-46a6-b0e2-56caf6527a33)
+- [Pumpkin]([https://app.spline.design/community/file/9948e7ee-5dfc-46a6-b0e2-56caf6527a33](https://app.spline.design/community/file/1eb4d849-cfbe-4b35-a522-b38638c02c87))
 
 #
 
