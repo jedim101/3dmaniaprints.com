@@ -58,11 +58,12 @@ export default function Product({ params }: { params: { productName: string } })
 
 			<div className="flex h-full w-2/3 flex-col rounded-3xl border border-slate-700 p-8">
 				<h1 className="text-3xl font-semibold">{product.name}</h1>
-				<p className="mt-4 font-light text-slate-400">{product.description}</p>
 				<div className="mt-6 space-x-2 text-xl">
 					<span>${cost.toFixed(2)}</span>
 					{product.price !== cost && <s className="text-base text-red-500">${product.price.toFixed(2)}</s>}
 				</div>
+				<p className="mt-4 whitespace-pre-wrap font-light text-slate-400">{product.description}</p>
+
 				{product.customizations?.map((customization) => (
 					<div className="mt-8" key={customization.name}>
 						{customization.type === "text" ? (
