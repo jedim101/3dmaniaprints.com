@@ -9,3 +9,6 @@ I used Spline for the 3D embeds, which you can view here:
 #
 
 All 3d models were designed separately and prior to this site
+
+<img width="1272" alt="image" src="https://github.com/user-attachments/assets/bb7990c1-e365-4d5f-b04d-b221d7b625fc">
+
